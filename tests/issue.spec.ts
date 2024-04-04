@@ -1,34 +1,50 @@
-import { test, expect } from "@playwright/test";
-import { USER, URL } from "../test-data";
-import { before } from "node:test";
+import { test, expect } from '@playwright/test';
+import { USER } from '../test-data';
 import { faker } from '@faker-js/faker';
+import { Login, Issue } from '../page/contacts';
 
-test.describe("Issue creation", () => {
-  const userData = { randomName: faker.string.uuid, randomIssue: faker.string.uuid}
-  test.beforeEach(async ({ page }) => {
-    await page.goto("/register");
-    await expect(page).toHaveTitle(/Web Client | WebIssues/);
-    await page.fill("#field-login-login", `${USER.username}`);
-    await page.fill("#field-login-password", `${USER.password}`);
-    await page.click("//*[@id='field-login-loginSubmit']");
-    await expect(page.getByText(/Log Out/i)).toBeVisible();
-    await page.goto('/register/client/index.php?folder=1')
-  });
-  test("Should be able to create and delete issue", async ({page}) => {
-    await page.click('[title="Add Issue"]')
-    await page.fill('#field-issues-issueName', `${userData.randomName}`)
-    await page.fill('#field-issues-descriptionText', `${userData.randomIssue}`)
-    
-  })
-  test.afterAll(async ({page}) => {
-    await page.fill(`#field-search-searchBox`, `${userData.randomName}`);
-    await page.click("#field-search-searchSubmit");
-    await page.click(`[title="${userData.randomIssue}"]`)
-    await page.click('[title="Delete Issue"]')
-    await page.click("#field-issues-okSubmit")
-    await page.click("#field-issues-okSubmit")
-    await page.click('[title="Delete Issue"]')
-    await page.click('#field-issues-okSubmit')
-    await expect(page.getByText(/Log Out/i)).toBeVisible();
-  })
+test.describe('Issue creation', () => {
+    let login: Login;
+    let issue: Issue;
+    const userData = {
+        randomName: faker.person.firstName(),
+        loremIpsum: faker.lorem.paragraph(3)
+    };
+    test.beforeEach(async ({ page }) => {
+        login = new Login(page);
+        issue = new Issue(page);
+        await page.goto('/register');
+        await expect(page).toHaveTitle(/Web Client | WebIssues/);
+        await login.login(`${USER.username}`, `${USER.password}`);
+        await page.goto('/register/client/index.php?folder=1');
+    });
+
+    test('Should be able to create issue', async ({ page }) => {
+        await issue.createIssue(`${userData.randomName}`, `${userData.loremIpsum}`);
+        await expect(page).toHaveTitle(/Web Client | WebIssues/);
+    });
+
+    test('Shouldnt be able to create issue with empty name', async ({ page }) => {
+        await issue.createIssue('', `${userData.loremIpsum}`);
+        await expect(page.getByText('Some of the values you entered are incorrect.')).toBeVisible();
+    });
+
+    test('Should be able to create an and delete it instantly', async ({ page }) => {
+        const issueNameStatic = userData.randomName;
+        await issue.createIssue(`${issueNameStatic}`, `${userData.loremIpsum}`);
+        await issue.deleteIssueAfterCreation();
+        await expect(page.getByText(`${issueNameStatic}`)).toBeHidden();
+    });
+
+    test('Should be able to create, search for the created issue and delete it', async ({ page }) => {
+        const issueNameStatic = userData.randomName;
+        await issue.createIssue(`${issueNameStatic}`, `${userData.loremIpsum}`);
+        await issue.deleteIssueBySearchingForIssue(`${issueNameStatic}`);
+        await expect(page.getByText(`${issueNameStatic}`)).toBeHidden();
+    });
+
+    test('Should be able to search by name', async ({ page }) => {
+        await issue.searchByUserName('vytenis.sakinis@gmail.com');
+        await expect(page).toHaveTitle(/Web Client | WebIssues/);
+    });
 });
