@@ -19,3 +19,12 @@ export const API: Api = {
 };
 
 export const URL: string | undefined = process.env.URL;
+
+export function getRandomString(length: number, character: string) {
+    const chars = character;
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
