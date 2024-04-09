@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
-import { API } from './test-data';
+import { API, COOKIE } from './test-data';
 
 dotenv.config({ path: `ENV/${process.env.DOT_ENV || 'test'}.env` });
 
@@ -34,7 +34,8 @@ export default defineConfig({
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'on-first-retry',
         extraHTTPHeaders: {
-            'X-API-KEY': API.key
+            'X-API-KEY': API.key,
+            cookie: COOKIE
         }
     },
 

@@ -61,7 +61,6 @@ test.describe('Test', () => {
         await page.fill('#w2lw7', 'e');
         const selector = '//button[text()="Render"]';
         await page.$eval(selector, (element) => element.click());
-        await page.locator('#canvas').screenshot();
         await expect(page.locator('#canvas')).toHaveScreenshot();
     });
 });

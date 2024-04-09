@@ -28,3 +28,7 @@ export function getRandomString(length: number, character: string) {
     }
     return result;
 }
+
+export const APP_URL: string | undefined = process.env.APP_URL;
+
+export const COOKIE: string | undefined = process.env.COOKIE;
