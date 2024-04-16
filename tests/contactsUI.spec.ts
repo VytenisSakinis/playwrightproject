@@ -12,7 +12,6 @@ test.describe('should', () => {
                 url: 'https://app.omnisend.com'
             }
         ]);
-
         await page.goto('https://app.omnisend.com/audience/imports/wizard/contact');
         await page.fill('//input[@placeholder="Enter email"]', `${email}`);
         await page.click('//*[contains(text(), "This person gave permission to be added to the list.")]');
@@ -28,7 +27,7 @@ test.describe('should', () => {
         await page.keyboard.press('Escape');
         await page.click('//*[contains(text(), "Save & show contacts")]');
         await page.fill('//input', email);
-        await page.click('//div[(text()=" Save ")]')
+        await page.click('//div[(text()=" Save ")]');
         await expect(page.locator('//tbody')).toContainText(`${email.toLowerCase()}`, { timeout: 30000 });
     });
 });
