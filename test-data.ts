@@ -32,3 +32,7 @@ export function getRandomString(length: number, character: string) {
 export const APP_URL: string | undefined = process.env.APP_URL;
 
 export const COOKIE: string | undefined = process.env.COOKIE;
+
+export const sleep = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+};

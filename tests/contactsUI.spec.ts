@@ -17,7 +17,6 @@ test.describe('should', () => {
         await page.click('//*[contains(text(), "This person gave permission to be added to the list.")]');
         await page.click('//*[contains(text(), "Add subscriber")]');
         await expect(page.locator('//tbody')).toContainText(`${email.toLowerCase()}`);
-
         await page.goto('https://app.omnisend.com/audience/segments/editor/');
         await page.click('//*[contains(text(), "Add filter")]');
         await page.click('//*[contains(text(), "Email address")]');
