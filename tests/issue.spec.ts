@@ -40,7 +40,7 @@ test.describe('Issue creation', () => {
         const issueNameStatic = userData.randomName;
         await issue.createIssue(`${issueNameStatic}`, `${userData.loremIpsum}`);
         await issue.deleteIssueBySearchingForIssue(`${issueNameStatic}`);
-        await expect(page.getByText(`${issueNameStatic}`)).toBeHidden();
+        await expect(page.getByText(`${issueNameStatic.toLowerCase()}`)).toBeHidden();
     });
 
     test('Should be able to search by name', async ({ page }) => {

@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { sleep } from '../test-data';
 
 test.describe('Valve tests', () => {
     const testConfiguration = [
