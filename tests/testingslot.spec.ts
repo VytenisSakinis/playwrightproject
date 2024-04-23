@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Skelbiu.lt and alio.lt tests', () => {
+test.describe('Slot machine tests', () => {
     test('testingmarather', async ({ page }) => {
         await page.goto('https://testingmarathon.com/testing/bugbook/');
         page.on('dialog', async (dialog) => {
